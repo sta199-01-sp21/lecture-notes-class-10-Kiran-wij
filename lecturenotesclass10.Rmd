@@ -1,12 +1,12 @@
 ---
 title: "Introduction to probability"
-author: ""
-date: ""
+author: "Kiran Wijesekera"
+date: "22/02/2021"
 output: html_document
 editor_options: 
   chunk_output_type: console
 ---
-
+8.3
 ```{r global_options, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE,
                       comment = "#>", highlight = TRUE,
