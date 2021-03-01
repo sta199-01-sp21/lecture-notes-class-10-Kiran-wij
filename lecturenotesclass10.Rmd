@@ -6,7 +6,7 @@ output: html_document
 editor_options: 
   chunk_output_type: console
 ---
-8.3
+
 ```{r global_options, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE,
                       comment = "#>", highlight = TRUE,
@@ -49,18 +49,23 @@ xtabs(~ Treatment + Improved, data = Arthritis) %>%
 ```
 
 - How many patients were enrolled in the clinical trial?
+168 total patients were enrolled in the trial
 
 - What is the probability a randomly selected patient received the placebo?
+The probability a randomly selected patient recieved the placebo is is 0.256
 
 - What is the probability a randomly selected patient received the placebo
   and had a marked improvement?
+  The probability of this is 0.0417
   
 - What is the probability a randomly selected patient received the placebo
   and the treatment?
+  The probability of this is 0
   
 - What is the probability a randomly selected patient had some improvement or
   was on the treatment?
-
+  The probability of this is 0.369
+  
 ## Using computer simulations to calculate probabilities
 
 #### Example
@@ -75,10 +80,13 @@ marbles <- c("red", "red", "white", "red", "blue", "blue", "red", "blue")
 Suppose we draw a single marble from our imaginary box, where all the marbles
 are equally likely to be selected. What is the probability the marble is blue? 
 How about white?
+The probability that the marble is blue is 3/8. The probability that it is white
+is 1/8.
 
 We can simulate this "drawing" with the `sample()` function.
 
 ```{r sample}
+#set.seed(100) to get same random draw every time
 sample(marbles, size = 1)
 ```
 
@@ -101,6 +109,8 @@ prop.table(counts)
 ```
 
 How close is this value to the "true" probability?
+This is incredibly close to the true probability values for all clours. In fact,
+for white marbles it is precisely the true probability.
 
 **To summarize our process:**
 
@@ -155,19 +165,31 @@ difference between dice roll 1 and dice roll 2 is equal to 4.
 
 Perform a simulation to compute this empirical probability.
 
-Write down your guess to the answer before you calculate it.
+
+I think there will be a higher probability that absolute value of the difference 
+between the two dice rolls is 4 because there are four different ways that I
+think this could happen [(1,5), (2,6), (5,1), (6,2)] versus just two ways in
+which the second roll could be a square of the first.
 
 ```{r simulate_rolls}
-
+two_dice_roll <- tibble(
+  die_1 = replicate(n = 10000, expr = sample(1:6, size = 1)),
+  die_2 = replicate(n = 10000, expr = sample(1:6, size = 1)))
 ```
 
-```{r identify_events}
 
+```{r identify_events}
+two_dice_roll <- two_dice_roll %>%
+  mutate(square = die_1^2 == die_2) %>% 
+  mutate(die_diff = abs(die_1 - die_2) == 4)
 ```
 
 ```{r summarize_rolls}
-
+two_dice_roll %>% 
+  summarize(prop_square = mean(square), prop_diff = mean(die_diff))
 ```
+
+With our simmulation we got prop_square = 0.0567 and prop_diff = 0.114.
 
 ## Additional Resources-please look at before Weds.
 
